@@ -62,7 +62,7 @@ public class Main {
 				}
 				currentUser = currentUser.loginUser(accounts);
 				if(currentUser.getLogin() == null) {
-					System.out.println("(0) Voltar\n");
+					System.out.println("\n(0) Voltar\n");
 					aux = input.nextInt();
 					continue;
 				}
@@ -126,7 +126,7 @@ public class Main {
 						System.out.println("### Enviar Convite de Amizade ###\n");
 						currentUser.sendInvite(currentUser, accounts);
 					}
-					System.out.println("(0) Voltar\n");
+					System.out.println("\n(0) Voltar\n");
 					aux = input.nextInt();
 				}
 				else if(function == 3)
@@ -171,7 +171,7 @@ public class Main {
 							System.out.println("Sem Mensagens!\n");
 						}
 					}
-					System.out.println("(0) Voltar\n");
+					System.out.println("\n(0) Voltar\n");
 					aux = input.nextInt();
 				}
 				else if(function == 4)
@@ -205,7 +205,7 @@ public class Main {
 						System.out.println("### Comunidades que sou Membro ###");
 						currentUser.printCommunities(currentUser, currentUser.getCommunities());
 					}
-					System.out.println("(0) Voltar\n");
+					System.out.println("\n(0) Voltar\n");
 					aux = input.nextInt();
 				}
 				else if(function == 5)
@@ -213,7 +213,7 @@ public class Main {
 					useful.cleanScreen();
 					System.out.println("### Recuperar Informações do Usuário ###\n");
 					currentUser.printUserInfo(currentUser);
-					System.out.println("(0) Voltar\n");
+					System.out.println("\n(0) Voltar\n");
 					aux = input.nextInt();
 				}
 				else if(function == 6)
@@ -224,14 +224,14 @@ public class Main {
 						break;
 					}
 					else {
-						System.out.println("(0) Voltar\n");
+						System.out.println("\n(0) Voltar\n");
 						aux = input.nextInt();
 					}		
 				}
 				else
 				{
 					System.out.println("Opção inválida!\n");
-					System.out.println("(0) Voltar\n");
+					System.out.println("\n(0) Voltar\n");
 					aux = input.nextInt();
 					continue;
 				}

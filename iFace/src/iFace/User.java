@@ -74,6 +74,11 @@ public class User {
 		}
 		System.out.print("\nName: ");
 		name = input.nextLine();
+		User existentName = searchUser(accounts, 2, login);
+		if(existentName != null) {
+			System.out.println("Este Nome já está sendo usado!\n");
+			return;
+		}
 		System.out.print("\nPassword: ");
 		password = input.nextLine();
 		newUser.setLogin(login);
@@ -132,6 +137,11 @@ public class User {
 		else if(edit == 3){
 			System.out.println("Digite o novo Nome:\n");
 			newString = input.next();
+			User existentName = searchUser(accounts, 2, newString);
+			if(existentName != null) {
+				System.out.println("Este Nome já está sendo usado!\n");
+				return;
+			}
 			currentUser.setName(newString);
 		}
 		else {
@@ -158,7 +168,6 @@ public class User {
 					return accounts.get(i);
 				}
 			}
-			System.out.println("Usuário não encontrado!\n");
 		}
 		return null;
 	}
@@ -282,16 +291,37 @@ public class User {
 			
 			n = currentUser.getMyCommunities().size();
 			Community currentCommunity = new Community();
+			User auxUser = new User();
 			for(i = 0; i < n; i++) {
 				currentCommunity = (Community)currentUser.getMyCommunities().get(i);
 				m = currentCommunity.members.size();
 				for(j = 0; j < m; j++) {
-					
+					auxUser = currentCommunity.members.get(i);
+					leaveCommunity(auxUser, currentCommunity);
 				}
 				currentCommunity.setName(null);
 				currentCommunity.setDescription(null);
 			}
-			
+			n = currentUser.getCommunities().size();
+			for(i = 0; i < n; i++) {
+				currentCommunity = (Community)currentUser.getCommunities().get(i);
+				leaveCommunity(currentUser, currentCommunity);
+			}
+			n = currentUser.getFriends().size();
+			for(i = 0; i < n; i++) {
+				auxUser = (User)currentUser.getFriends().get(i);
+				removeFriend(currentUser, auxUser);
+			}
+			n = currentUser.getReceivedMessages().size();
+			for(i = 0; i < n; i++) {
+				currentUser.getReceivedMessages().remove(i);
+			}
+			n = currentUser.getSentMessages().size();
+			Message currentMessage = new Message();
+			for(i = 0; i < n; i++) {
+				currentMessage = (Message)currentUser.getSentMessages().get(i);
+				currentUser.deleteSentMessage(currentMessage);
+			}
 			n = accounts.size();
 			for(i = 0; i < n; i++) {
 				if(currentUser.getLogin().equals(accounts.get(i).login))
@@ -308,6 +338,51 @@ public class User {
 		else
 		{
 			return false;
+		}
+	}
+	public void leaveCommunity(User currentUser, Community currentCommunity) {
+		int n = currentCommunity.members.size();
+		String login;
+		for(int i = 0; i < n; i++) {
+			login = currentCommunity.members.get(i).getLogin();
+			if(login.equals(currentUser.getLogin())) {
+				currentCommunity.members.remove(i);
+				break;
+			}
+		}
+	}
+	public void removeFriend(User currentUser, User friend) {
+		String login = currentUser.getLogin();
+		String friendLogin = friend.getLogin();
+		String auxLogin;
+		User auxUser = new User();
+		int n = currentUser.getFriends().size();
+		for(int i = 0; i < n; i++) {
+			auxUser = (User)currentUser.getFriends().get(i);
+			if(friendLogin.equals(auxUser.getLogin())) {
+				currentUser.getFriends().remove(i);
+				break;
+			}
+		}
+		n = friend.getFriends().size();
+		for(int i = 0; i < n; i++) {
+			auxUser = (User)friend.getFriends().get(i);
+			if(login.equals(auxUser.getLogin())) {
+				friend.getFriends().remove(i);
+			}
+		}
+	}
+	public void deleteSentMessage(Message msg) {
+		String text = msg.getText();
+		User auxUser = msg.getReceiver();
+		Message auxMessage = new Message();
+		int n = auxUser.getReceivedMessages().size();
+		for(int i = 0; i < n; i++) {
+			auxMessage = (Message)auxUser.getReceivedMessages().get(i);
+			if(text.equals(auxMessage.getText()) && msg.getSender().equals(auxMessage.getSender()))
+			{
+				auxUser.getReceivedMessages().remove(i);
+			}
 		}
 	}
 }
