@@ -30,18 +30,17 @@ public class Message {
 	}
 	public void printMessage(Message currentMessage) {
 		System.out.println("De: " + currentMessage.getSender().getName());
-		System.out.println(currentMessage.getText());
+		System.out.println(currentMessage.getText() + "\n");
 	}
 	public void sendMessage(ArrayList<User> accounts, User senderUser, Message newMessage){
 		String text;
 		String receiver;
-		User receiverUser = null;
-		//Message newMessage = new Message();
+		User receiverUser = new User();
 		System.out.println("Digite o nome do Destinatário: ");
 		receiver = input.nextLine();
 		
 		receiverUser = receiverUser.searchUser(accounts, 2, receiver);
-		if(receiverUser == null) {
+		if(receiverUser.getLogin() == null) {
 			System.out.println("Usuário não encontrado!\n");
 			return;
 		}

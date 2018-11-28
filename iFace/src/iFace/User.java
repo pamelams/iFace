@@ -12,6 +12,8 @@ public class User {
 	private ArrayList<Message> sentMessages = new ArrayList<Message>();
 	private ArrayList<Message> receivedMessages = new ArrayList<Message>();
 	private ArrayList<User> invites = new ArrayList<User>();
+	private ArrayList<Community> communities = new ArrayList<Community>();
+	private ArrayList<Community> myCommunities = new ArrayList<Community>();
 	
 	Scanner input = new Scanner(System.in);
 	Useful useful = new Useful();
@@ -19,7 +21,8 @@ public class User {
 	public User() {
 		this.sentMessages = sentMessages;
 		this.receivedMessages = receivedMessages;
-
+		this.invites = invites;
+		this.communities = communities;
 	}
 	public ArrayList getSentMessages() {
 		return sentMessages;
@@ -32,6 +35,12 @@ public class User {
 	}
 	public ArrayList getInvites() {
 		return invites;
+	}
+	public ArrayList getCommunities() {
+		return communities;
+	}
+	public ArrayList getMyCommunities() {
+		return myCommunities;
 	}
 	public void setLogin(String login) {
 		this.login = login;
@@ -140,7 +149,6 @@ public class User {
 					return accounts.get(i);
 				}
 			}
-			System.out.println("Usuário não encontrado!\n");
 		}
 		else if(attribute == 2) { // search name
 			
@@ -154,39 +162,14 @@ public class User {
 		}
 		return null;
 	}
-	public boolean removeAccount(User currentUser, ArrayList<User> accounts) {
-		System.out.println("Tem Certeza que deseja remover sua conta?\n"
-				+ "(1) Sim\n"
-				+ "(2) Não\n");
-		int option = input.nextInt();
-		if(option == 1)
-		{
-			currentUser.setName(null);
-			currentUser.setPassword(null);
-			currentUser.setPassword(null);
-			int n = accounts.size();
-			for(int i = 0; i < n; i++) {
-				if(currentUser.getLogin().equals(accounts.get(i).login))
-				{
-					accounts.remove(i);
-					break;
-				}
-			}
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
+	
 	public void friendsList(User currentUser) {
 		int n = currentUser.getFriends().size();
 		User friend = new User();
 		for(int i = 0; i < n; i++) {
 			friend = (User)currentUser.getFriends().get(i);
 			System.out.println(friend.getName());
-		}
-		
+		}	
 	}
 	public void answerInvites(User currentUser, ArrayList accounts) {
 		int n = currentUser.getInvites().size();
@@ -228,6 +211,82 @@ public class User {
 			newFriend.getInvites().add(currentUser);
 			System.out.println("\nConvite Enviado!\n");
 			return;
+		}
+	}
+	public void createCommunity(User currentUser, ArrayList<Community> allCommunities) {
+		Community newCommunity = new Community();
+		String name;
+		String description;
+		System.out.println("Digite o nome da nova Comunidade:\n");
+		name = input.nextLine();
+		System.out.println("Digite a Descrição da nova Comunidade:\n");
+		description = input.nextLine();
+		currentUser.getMyCommunities().add(newCommunity);
+		newCommunity.owner = currentUser;
+		allCommunities.add(newCommunity);
+	}
+	public void addMember(User currentUser, ArrayList<Community> allCommunities) {
+		String name;
+		System.out.println("Digite o nome da Comunidade que deseja entrar:\n");
+		name = input.nextLine();
+		int n = allCommunities.size();
+		for(int i = 0; i < n; i++) {
+			if(name.equalsIgnoreCase(allCommunities.get(i).name)) {
+				allCommunities.get(i).members.add(currentUser);
+				currentUser.getCommunities().add(allCommunities.get(i));
+				break;
+			}
+		}
+		System.out.println("Comunidade não Encontrada!\n");
+	}
+	public void printCommunities(User currentUser, ArrayList<Community> communities) {
+		int n = currentUser.getMyCommunities().size();
+		Community currentCommunity;
+		for(int i = 0; i < n; i++) {
+			currentCommunity = communities.get(i);
+			System.out.println("\nComunidade: " + currentCommunity.name + "\nDescrição: " + currentCommunity.description);
+		}
+	}
+	public void printUserInfo(User currentUser) {
+		System.out.println("->Login: " + currentUser.getLogin() +
+				"\n->Nome: " + currentUser.getName() +
+				"\n->Minhas Comunidades:");
+		currentUser.printCommunities(currentUser, currentUser.getMyCommunities());
+		System.out.println("->Comunidades que sou Membro:");
+		currentUser.printCommunities(currentUser, currentUser.getCommunities());
+		System.out.println("->Amigos:");
+		currentUser.friendsList(currentUser);
+		System.out.println("->Mensagens:");
+		int n = currentUser.getReceivedMessages().size();
+		Message msg;
+		for(int i = n-1; i >= 0; i--) {
+			msg = (Message)currentUser.getReceivedMessages().get(i);
+			msg.printMessage(msg);
+		}	
+	}
+	public boolean removeAccount(User currentUser, ArrayList<User> accounts) {
+		System.out.println("Tem Certeza que deseja remover sua conta? (Não pode ser desfeito)\n"
+				+ "(1) Sim\n"
+				+ "(2) Não\n");
+		int option = input.nextInt();
+		if(option == 1)
+		{
+			currentUser.setName(null);
+			currentUser.setPassword(null);
+			currentUser.setPassword(null);
+			int n = accounts.size();
+			for(int i = 0; i < n; i++) {
+				if(currentUser.getLogin().equals(accounts.get(i).login))
+				{
+					accounts.remove(i);
+					break;
+				}
+			}
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 }
