@@ -219,21 +219,27 @@ public class User {
 		String description;
 		System.out.println("Digite o nome da nova Comunidade:\n");
 		name = input.nextLine();
+		newCommunity.setName(name);
 		System.out.println("Digite a Descrição da nova Comunidade:\n");
 		description = input.nextLine();
+		newCommunity.setDescription(description);
 		currentUser.getMyCommunities().add(newCommunity);
 		newCommunity.owner = currentUser;
 		allCommunities.add(newCommunity);
 	}
 	public void addMember(User currentUser, ArrayList<Community> allCommunities) {
 		String name;
+		String search;
+		Community currentCommunity = new Community();
 		System.out.println("Digite o nome da Comunidade que deseja entrar:\n");
 		name = input.nextLine();
 		int n = allCommunities.size();
 		for(int i = 0; i < n; i++) {
-			if(name.equalsIgnoreCase(allCommunities.get(i).name)) {
-				allCommunities.get(i).members.add(currentUser);
-				currentUser.getCommunities().add(allCommunities.get(i));
+			currentCommunity = allCommunities.get(i);
+			search = currentCommunity.name;
+			if(name.equalsIgnoreCase(search)) {
+				currentCommunity.members.add(currentUser);
+				currentUser.getCommunities().add(currentCommunity);
 				break;
 			}
 		}
@@ -269,19 +275,34 @@ public class User {
 				+ "(1) Sim\n"
 				+ "(2) Não\n");
 		int option = input.nextInt();
+		int n, m; 
+		int i, j;
 		if(option == 1)
-		{
-			currentUser.setName(null);
-			currentUser.setPassword(null);
-			currentUser.setPassword(null);
-			int n = accounts.size();
-			for(int i = 0; i < n; i++) {
+		{	
+			
+			n = currentUser.getMyCommunities().size();
+			Community currentCommunity = new Community();
+			for(i = 0; i < n; i++) {
+				currentCommunity = (Community)currentUser.getMyCommunities().get(i);
+				m = currentCommunity.members.size();
+				for(j = 0; j < m; j++) {
+					
+				}
+				currentCommunity.setName(null);
+				currentCommunity.setDescription(null);
+			}
+			
+			n = accounts.size();
+			for(i = 0; i < n; i++) {
 				if(currentUser.getLogin().equals(accounts.get(i).login))
 				{
 					accounts.remove(i);
 					break;
 				}
 			}
+			currentUser.setName(null);
+			currentUser.setPassword(null);
+			currentUser.setLogin(null);
 			return true;
 		}
 		else

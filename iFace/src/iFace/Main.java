@@ -16,13 +16,12 @@ public class Main {
 		User currentUser = null;
 		Useful useful = new Useful();
 		int cont = 1, function, option;
-		
-		
-		System.out.println("### Bem vindo(a) ao iFace! ###");
-		
+				
 		while(cont != 0)
 		{
 			function = 1;
+			useful.cleanScreen();
+			System.out.println("### Bem vindo(a) ao iFace! ###");
 			System.out.println("(0) Sair\n"
 					+ "(1) Criar Conta\n"
 					+ "(2) Fazer Login\n");
@@ -44,7 +43,8 @@ public class Main {
 				}
 				accounts.add(newUser);
 				currentUser = newUser;
-				
+				System.out.println("Conta Criada com Sucesso!\n\n(0) Voltar\n");
+				aux = input.nextInt();
 			}
 			else if(cont == 2)
 			{
@@ -56,10 +56,14 @@ public class Main {
 					login = input.nextLine();
 					login = input.nextLine();
 					System.out.println("Usuário não encontrado!\n");
+					System.out.println("(0) Voltar\n");
+					aux = input.nextInt();
 					continue;
 				}
 				currentUser = currentUser.loginUser(accounts);
-				if(currentUser == null) {
+				if(currentUser.getLogin() == null) {
+					System.out.println("(0) Voltar\n");
+					aux = input.nextInt();
 					continue;
 				}
 				
@@ -88,10 +92,13 @@ public class Main {
 				}
 				else if(function == 1)
 				{	
+					useful.cleanScreen();
+					System.out.println("### Editar Perfil ###\n");
 					currentUser.editAccount(currentUser, accounts);
 				}
 				else if(function == 2)
 				{
+					useful.cleanScreen();
 					System.out.println("### Amigos ###\n"
 							+ "(0) Voltar\n"
 							+ "(1) Lista de Amigos\n"
@@ -103,16 +110,19 @@ public class Main {
 					}
 					else if(option == 1)
 					{
+						useful.cleanScreen();
 						System.out.println("### Lista de Amigos ###\n");
 						currentUser.friendsList(currentUser);
 					}
 					else if(option == 2)
 					{	
+						useful.cleanScreen();
 						System.out.println("### Convites de Amizade ###\n");
 						currentUser.answerInvites(currentUser, accounts);
 					}
 					else if(option == 3)
 					{
+						useful.cleanScreen();
 						System.out.println("### Enviar Convite de Amizade ###\n");
 						currentUser.sendInvite(currentUser, accounts);
 					}
@@ -121,6 +131,7 @@ public class Main {
 				}
 				else if(function == 3)
 				{
+					useful.cleanScreen();
 					System.out.println("### Mensagens ###\n"
 							+ "(0) Voltar\n"
 							+ "(1) Enviar Mensagem\n"
@@ -130,6 +141,8 @@ public class Main {
 						continue;
 					}
 					else if(option == 1) {
+						useful.cleanScreen();
+						System.out.println("### Enviar Mensagem ###\n");
 						Message newMessage = new Message();
 						newMessage.sendMessage(accounts, currentUser, newMessage);
 					}
@@ -137,6 +150,8 @@ public class Main {
 						int n = currentUser.getReceivedMessages().size();
 						Message msg;
 						for(int i = n-1; i >= 0; i--) {
+							useful.cleanScreen();
+							System.out.println("### Ver Mensagem ###\n");
 							msg = (Message)currentUser.getReceivedMessages().get(i);
 							msg.printMessage(msg);
 							System.out.println("(0) Voltar\n"
@@ -150,45 +165,74 @@ public class Main {
 								currentUser.getReceivedMessages().remove(i);
 							}
 						}
-					}	
+						if(n == 0) {
+							useful.cleanScreen();
+							System.out.println("### Ver Mensagem ###\n");
+							System.out.println("Sem Mensagens!\n");
+						}
+					}
+					System.out.println("(0) Voltar\n");
+					aux = input.nextInt();
 				}
 				else if(function == 4)
 				{
+					useful.cleanScreen();
 					System.out.println("### Comunidades ###\n"
 							+ "(0) Voltar\n"
 							+ "(1) Criar Comunidade\n"
-							+ "(2) Entrar em Comunidade\n"
+							+ "(2) Entrar em uma Comunidade\n"
 							+ "(3) Minhas Comunidades\n"
 							+ "(4) Comunidades que sou Membro\n");
 					option = input.nextInt();
 					if(option == 1){
+						useful.cleanScreen();
+						System.out.println("### Criar Comunidade ###\n");
 						currentUser.createCommunity(currentUser, allCommunities);
+						System.out.println("\nComunidade Criada com Sucesso!\n");
 					}
 					else if(option == 2){	
+						useful.cleanScreen();
+						System.out.println("### Entrar em uma Comunidade ###\n");
 						currentUser.addMember(currentUser, allCommunities);
 					}
 					else if(option == 3){
+						useful.cleanScreen();
 						System.out.println("### Minhas Comunidades ###");
 						currentUser.printCommunities(currentUser, currentUser.getMyCommunities());
 					}
 					else if(option == 4) {
+						useful.cleanScreen();
 						System.out.println("### Comunidades que sou Membro ###");
 						currentUser.printCommunities(currentUser, currentUser.getCommunities());
 					}
+					System.out.println("(0) Voltar\n");
+					aux = input.nextInt();
 				}
 				else if(function == 5)
 				{
+					useful.cleanScreen();
+					System.out.println("### Recuperar Informações do Usuário ###\n");
 					currentUser.printUserInfo(currentUser);
+					System.out.println("(0) Voltar\n");
+					aux = input.nextInt();
 				}
 				else if(function == 6)
 				{
+					useful.cleanScreen();
+					System.out.println("### Remover Conta ###\n");
 					if(currentUser.removeAccount(currentUser, accounts) == true){
 						break;
 					}
+					else {
+						System.out.println("(0) Voltar\n");
+						aux = input.nextInt();
+					}		
 				}
 				else
 				{
 					System.out.println("Opção inválida!\n");
+					System.out.println("(0) Voltar\n");
+					aux = input.nextInt();
 					continue;
 				}
 				
